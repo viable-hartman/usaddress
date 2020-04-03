@@ -156,7 +156,7 @@ def parse(address_string):
     return list(zip(tokens, tags))
 
 
-def tag(address_string, tag_mapping=None):
+def tag(address_string, tag_mapping=None, skip_repeated_lbls=False):
     tagged_address = OrderedDict()
 
     last_label = None
@@ -182,8 +182,8 @@ def tag(address_string, tag_mapping=None):
         elif label not in tagged_address:
             tagged_address[label] = [token]
         else:
-            raise RepeatedLabelError(address_string, parse(address_string),
-                                     label)
+            if not skip_repeated_lbls:
+                raise RepeatedLabelError(address_string, parse(address_string), label)
 
         last_label = label
 
